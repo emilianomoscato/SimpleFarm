@@ -1,4 +1,55 @@
-# Simple DeFi Yield Farming Exercise
+# SimpleFarm 
+Solidity contract for staking LPTokens providing DappTokens rewards to stakers.
+
+LPTokens were mocked as simple OpenZeppelin ERC20 extension contract.
+
+DappTokens were deployed as OpenZeppelin ERC20 extension with functions to allow the Farming contract to mint when stakers claims their rewards.
+
+SimpleFarm has a fixed reward ratio por block, that could be changed by owner between 
+
+    uint256 public constant REWARD_PER_BLOCK_MAX = 1e18;
+    uint256 public constant REWARD_PER_BLOCK_MIN = 1e16;
+
+This rewards per block are distributed to the users based on their staking ratio over the Farm.
+
+Block checkpoint is stored for each user, allowing them to claim their rewards by running `claimRewards` public function. This function will calculate user's individual rewards, without calculating all stakers rewards so the operation is not expensive at gas consumption.
+This design decition could lead to some inequalities when there are few stakers, but should be marginal when there are enough platform users.
+
+Contract owner is allowed to distribute rewards to all users. This is the only way to distribute rewards to all users at the same time.
+
+## SimpleFarm V2
+SimpleFarm uses `OwnableUpgradeable` from OpenZeppelin to implment Proxy pattern that allow us to upgrade the contract when needed.
+
+SimpleFarm V2 implements fixed claim fees to the stakers to encourage them to keep the stakes.
+
+Claim fees can be modified by contract owner always between: 
+
+```
+uint256 public constant CLAIM_FEE_MAX = 5;
+uint256 public constant CLAIM_FEE_MIN = 1;
+```
+
+## Compile and deploy
+To compile project just:
+```
+npx hardhat compile
+```
+Deploy script also provided:
+```
+npx hardhat run  scripts/deploy.ts
+```
+
+## Tests
+Tests are also provided:
+```
+npx hardhat test
+npx hardhat coverage
+```
+
+
+
+# Exercise original instructions
+## Simple DeFi Yield Farming Exercise
 
 How to use Farms (Yield Farming) in PancakeSwap
 https://docs.pancakeswap.finance/products/yield-farming/how-to-use-farms
