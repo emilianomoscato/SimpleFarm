@@ -1,8 +1,8 @@
-import { deployTokenFarmFixture } from "./Fixtures";
+import { deployTokenFarmFixture, depositFixture } from "./Fixtures";
 import { deployment } from "./TokenFarm-deployment";
 import { deposit } from "./TokenFarm-deposit";
-import { depositFixture } from "./Fixtures";
-import { claimRewards, claimRewardsAfterUnstake, distributeRewards } from "./TokenFarm-Rewards";
+import { changeRewardPerBlock, claimRewards, claimRewardsAfterUnstake, distributeRewards } from "./TokenFarm-Rewards";
+import { withdraw } from "./TokenFarm-withdraw";
 
 describe("TokenFarm", function () {
     
@@ -14,12 +14,20 @@ describe("TokenFarm", function () {
         deposit(depositFixture);
     });
 
+    describe("Withdraw", function () {
+        withdraw(depositFixture);
+    });
+
     describe("Claim Rewards", function () {
         claimRewards(depositFixture);
     });
 
     describe("Distribute Rewards", function () {
         distributeRewards(depositFixture);
+    });
+
+    describe("Change Reward Per Block", function () {
+        changeRewardPerBlock(depositFixture);
     });
 
     describe("Claim Rewards after unstake", function () {

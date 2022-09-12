@@ -44,6 +44,7 @@ contract TokenFarm is OwnableUpgradeable {
     event Unstaked(address indexed user, uint256 amount);
     event RewardPaid(address indexed user, uint256 reward);
     event RewardsDistribution(uint256 reward, uint256 blockNumber);
+    event RewardPerBlockChanged(uint256 rewardPerBlock);
 
 
     modifier onlyStakers() {
@@ -253,6 +254,8 @@ contract TokenFarm is OwnableUpgradeable {
         require(_rewardPerBlock >= REWARD_PER_BLOCK_MIN && _rewardPerBlock <= REWARD_PER_BLOCK_MAX, 
             "reward per block must be between REWARD_PER_BLOCK_MIN and REWARD_PER_BLOCK_MAX");
         rewardPerBlock = _rewardPerBlock; 
+
+        emit RewardPerBlockChanged(_rewardPerBlock);
     }       
 }
 

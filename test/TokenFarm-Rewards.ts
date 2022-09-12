@@ -3,6 +3,19 @@ import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 import "@nomiclabs/hardhat-ethers";
 
+export function changeRewardPerBlock(fixture: Function) {
+    it("Should change rewards per block", async function () {
+        const { tokenFarm, deployer, rewardPerBlock } = await loadFixture(fixture);
+
+        const newRewardPerBlock = rewardPerBlock.sub(1);
+        await tokenFarm.connect(deployer).changeRewardPerBlock(newRewardPerBlock);
+
+        expect(await tokenFarm.rewardPerBlock()).to.equal(newRewardPerBlock);
+    });
+
+    
+}
+
 export function claimRewards(fixture: Function) {
     it("Should update user's dappToken balance", async function () {
         const { tokenFarm, alice, rewardPerBlock, dappToken } = await loadFixture(fixture);

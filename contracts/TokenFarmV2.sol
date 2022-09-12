@@ -44,6 +44,7 @@ contract TokenFarmV2 is OwnableUpgradeable {
     event Unstaked(address indexed user, uint256 amount);
     event RewardPaid(address indexed user, uint256 reward);
     event RewardsDistribution(uint256 reward, uint256 blockNumber);
+    event RewardPerBlockChanged(uint256 rewardPerBlock);
 
     // Fees upgrade from V1 to V2
     // Claim fee range
@@ -198,7 +199,7 @@ contract TokenFarmV2 is OwnableUpgradeable {
         uint256 fee = rewardPerBlock * claimFee;
 
         // check if user has pending rewards
-        require(reward > fee, "user has less rewards than claim fee");
+        require(reward > fee, "User has less rewards than claim fee");
 
         // reset pendig rewards balance
         stakerInfo[msg.sender].pendigRewards = 0;
@@ -260,7 +261,9 @@ contract TokenFarmV2 is OwnableUpgradeable {
     function changeRewardPerBlock(uint256 _rewardPerBlock) external onlyOwner {
         require(_rewardPerBlock >= REWARD_PER_BLOCK_MIN && _rewardPerBlock <= REWARD_PER_BLOCK_MAX, 
             "reward per block must be between REWARD_PER_BLOCK_MIN and REWARD_PER_BLOCK_MAX");
-        rewardPerBlock = _rewardPerBlock; 
+        rewardPerBlock = _rewardPerBlock;
+
+        emit RewardPerBlockChanged(_rewardPerBlock); 
     }
     
     /**
@@ -284,7 +287,7 @@ contract TokenFarmV2 is OwnableUpgradeable {
      */
     function withdrawFees() external onlyOwner {
         // check if there are fees to withdraw
-        require(collectedFees > 0, "no fees to withdraw");
+        require(collectedFees > 0, "No fees to withdraw");
 
         // fetch fees
         uint256 fees = collectedFees;
